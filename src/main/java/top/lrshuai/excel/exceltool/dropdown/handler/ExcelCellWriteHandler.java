@@ -66,16 +66,15 @@ public class ExcelCellWriteHandler implements SheetWriteHandler {
                     workbook.setSheetHidden(hiddenIndex, true);
                 }
             }
-            // 下拉列表约束数据
+            // v 就是下拉列表的具体数据
             DataValidationConstraint constraint = helper.createExplicitListConstraint(v);
-            // 设置约束
+            // 设置下拉约束
             DataValidation validation = helper.createValidation(constraint, rangeList);
             // 阻止输入非下拉选项的值
             validation.setErrorStyle(DataValidation.ErrorStyle.STOP);
             validation.setShowErrorBox(true);
             validation.setSuppressDropDownArrow(true);
             validation.createErrorBox("提示", "此值与单元格定义格式不一致");
-            // validation.createPromptBox("填写说明：","填写内容只能为下拉数据集中的单位，其他单位将会导致无法入仓");
             sheet.addValidationData(validation);
         });
     }

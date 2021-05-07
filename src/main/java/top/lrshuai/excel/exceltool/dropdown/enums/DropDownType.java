@@ -1,5 +1,8 @@
 package top.lrshuai.excel.exceltool.dropdown.enums;
 
+/**
+ * 下拉类型枚举
+ */
 public enum DropDownType {
     NONE("NONE","无，空"),
     DEPT("dept","部门"),

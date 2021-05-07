@@ -1,8 +1,6 @@
 package top.lrshuai.excel.exceltool.controller;
 
-import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.toolkit.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,10 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import top.lrshuai.excel.exceltool.dict.entity.User;
 import top.lrshuai.excel.exceltool.dict.service.IUserService;
 import top.lrshuai.excel.exceltool.dropdown.template.UserTemplate;
-import top.lrshuai.excel.exceltool.entity.ExcelDataDto;
 import top.lrshuai.excel.exceltool.entity.UserDto;
-import top.lrshuai.excel.exceltool.listener.BaseExcelDataListener;
-import top.lrshuai.excel.exceltool.listener.ExcelDataListener;
 import top.lrshuai.excel.exceltool.utils.EasyExcelUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -58,15 +53,13 @@ public class DropDownController {
     }
 
     /**
-     * 导入
+     * 导入用户
      * @throws Exception
      */
     @GetMapping("/upload")
     @ResponseBody
     public String update(MultipartFile file) throws Exception {
-        BaseExcelDataListener<UserDto> baseExcelDataListener = new BaseExcelDataListener();
-        EasyExcel.read(file.getInputStream(), UserDto.class, baseExcelDataListener).sheet().doRead();
-        List<UserDto> result = baseExcelDataListener.getResult();
+        List<UserDto> result = EasyExcelUtils.read(file,UserDto.class);
         List<User> toDbUserList = JSON.parseArray(JSON.toJSONString(result), User.class);
         userService.saveBatch(toDbUserList,toDbUserList.size());
         return "ok";

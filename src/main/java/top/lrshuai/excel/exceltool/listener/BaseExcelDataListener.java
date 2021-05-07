@@ -7,6 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 通用的解析excel 监听器
+ * @param <T>
+ */
 @Slf4j
 public class BaseExcelDataListener<T> extends AnalysisEventListener<T> {
 

@@ -11,6 +11,11 @@ import java.util.Optional;
  */
 public class ResolveAnnotation {
 
+    /**
+     * 解析注解，得到具体的下拉数据
+     * @param dropDownField 注解
+     * @return string[]
+     */
     public static String[] resolve(DropDownFields dropDownField) {
         if (!Optional.ofNullable(dropDownField).isPresent()) {
             return new String[0];

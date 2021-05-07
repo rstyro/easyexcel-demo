@@ -5,11 +5,15 @@ import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 import top.lrshuai.excel.exceltool.dropdown.annotation.DropDownFields;
 import top.lrshuai.excel.exceltool.dropdown.handler.ExcelCellWriteHandler;
 import top.lrshuai.excel.exceltool.dropdown.handler.ResolveAnnotation;
+import top.lrshuai.excel.exceltool.entity.UserDto;
+import top.lrshuai.excel.exceltool.listener.BaseExcelDataListener;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
@@ -28,9 +32,9 @@ public class EasyExcelUtils {
      * @param data 数据
      * @param templateClass 模板对象class
      * @param pageSize 每页多少条
-     * @param fileName 件名称
-     * @param response
-     * @throws Exception
+     * @param fileName 文件名称
+     * @param response 输出流
+     * @throws Exception err
      */
     public static void export(List data, Class templateClass, Integer pageSize, String fileName, HttpServletResponse response) throws Exception {
         pageSize = Optional.ofNullable(pageSize).orElse(50000);
@@ -85,6 +89,21 @@ public class EasyExcelUtils {
             out.flush();
             out.close();
         }
+    }
+
+
+    /**
+     * 读取excel 并解析
+     * @param file 文件
+     * @param clazz 解析成哪个dto
+     * @param <T> t
+     * @return list
+     * @throws IOException error
+     */
+    public static <T> List<T>  read(MultipartFile file,Class<T> clazz) throws IOException {
+        BaseExcelDataListener<T> baseExcelDataListener = new BaseExcelDataListener();
+        EasyExcel.read(file.getInputStream(), clazz, baseExcelDataListener).sheet().doRead();
+        return baseExcelDataListener.getResult();
     }
 
 }
