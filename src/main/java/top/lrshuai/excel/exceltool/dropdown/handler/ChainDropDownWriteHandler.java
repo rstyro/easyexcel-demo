@@ -9,9 +9,9 @@ import org.apache.poi.ss.util.CellRangeAddressList;
 import java.util.Map;
 
 /**
- * excel 下拉框 handler
+ * excel 级联下拉框 handler
  */
-public class ExcelCellWriteHandler implements SheetWriteHandler {
+public class ChainDropDownWriteHandler implements SheetWriteHandler {
 
     private final Map<Integer, String[]> map;
 
@@ -20,7 +20,7 @@ public class ExcelCellWriteHandler implements SheetWriteHandler {
      */
     private static final Integer LIMIT_NUMBER = 100;
 
-    public ExcelCellWriteHandler(Map<Integer, String[]> map) {
+    public ChainDropDownWriteHandler(Map<Integer, String[]> map) {
         this.map = map;
     }
 

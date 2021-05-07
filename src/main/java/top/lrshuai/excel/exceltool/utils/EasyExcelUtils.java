@@ -7,9 +7,8 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 import top.lrshuai.excel.exceltool.dropdown.annotation.DropDownFields;
-import top.lrshuai.excel.exceltool.dropdown.handler.ExcelCellWriteHandler;
+import top.lrshuai.excel.exceltool.dropdown.handler.DropDownWriteHandler;
 import top.lrshuai.excel.exceltool.dropdown.handler.ResolveAnnotation;
-import top.lrshuai.excel.exceltool.entity.UserDto;
 import top.lrshuai.excel.exceltool.listener.BaseExcelDataListener;
 
 import javax.servlet.http.HttpServletResponse;
@@ -68,7 +67,7 @@ public class EasyExcelUtils {
         OutputStream out = null;
         try {
             out = response.getOutputStream();
-            excelWriter = EasyExcel.write(out, templateClass).registerWriteHandler(new ExcelCellWriteHandler(map)).build();
+            excelWriter = EasyExcel.write(out, templateClass).registerWriteHandler(new DropDownWriteHandler(map)).build();
             // 分页
             List<List> lt = Lists.partition(data, pageSize);
             for (int i = 0; i < lt.size(); i++) {
