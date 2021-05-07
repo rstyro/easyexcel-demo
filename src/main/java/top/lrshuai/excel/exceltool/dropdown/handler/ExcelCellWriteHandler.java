@@ -9,7 +9,7 @@ import org.apache.poi.ss.util.CellRangeAddressList;
 import java.util.Map;
 
 /**
- * 导出 handler
+ * excel 下拉框 handler
  */
 public class ExcelCellWriteHandler implements SheetWriteHandler {
 
@@ -53,7 +53,7 @@ public class ExcelCellWriteHandler implements SheetWriteHandler {
                 }
                 Name category1Name = workbook.createName();
                 category1Name.setNameName(sheetName);
-                String excelLine = getExcelLine(k);
+                String excelLine = getColNum(k);
                 // =hidden!$H:$1:$H$50 sheet为hidden的 H1列开始H50行数据获取下拉数组
                 String refers = "=" + sheetName + "!$" + excelLine + "$1:$" + excelLine + "$" + (v.length + 1);
                 // 将刚才设置的sheet引用到你的下拉列表中
@@ -66,7 +66,7 @@ public class ExcelCellWriteHandler implements SheetWriteHandler {
                     workbook.setSheetHidden(hiddenIndex, true);
                 }
             }
-            // v 就是下拉列表的具体数据
+            // v 就是下拉列表的具体数据，下拉列表约束数据
             DataValidationConstraint constraint = helper.createExplicitListConstraint(v);
             // 设置下拉约束
             DataValidation validation = helper.createValidation(constraint, rangeList);
@@ -80,19 +80,26 @@ public class ExcelCellWriteHandler implements SheetWriteHandler {
     }
 
     /**
-     * 返回excel列标A-Z-AA-ZZ
-     *
-     * @param num 列数
+     * 获取Excel列的号码A-Z - AA-ZZ - AAA-ZZZ 。。。。
+     * @param num
      * @return
      */
-    private String getExcelLine(int num) {
-        String line = "";
-        int first = num / 26;
-        int second = num % 26;
-        if (first > 0) {
-            line = (char) ('A' + first - 1) + "";
+    private static String getColNum(int num) {
+        int MAX_NUM = 26;
+        char initChar = 'A';
+        if(num == 0){
+            return initChar+"";
+        }else if(num > 0 && num < MAX_NUM){
+            int result = num % MAX_NUM;
+            return (char) (initChar + result) + "";
+        }else if(num >= MAX_NUM){
+            int result = num / MAX_NUM;
+            int mod = num % MAX_NUM;
+            String starNum = getColNum(result-1);
+            String endNum = getColNum(mod);
+            return starNum+endNum;
         }
-        line += (char) ('A' + second) + "";
-        return line;
+        return "";
     }
+
 }

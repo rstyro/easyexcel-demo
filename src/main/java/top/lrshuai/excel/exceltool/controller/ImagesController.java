@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * excel 下拉相关
+ * 参考图片导出：https://www.yuque.com/easyexcel/doc/write#cb1b271f
  */
 @Controller
 @RequestMapping("/images")
