@@ -29,11 +29,13 @@ public class ChainDropDown {
 //     * 子类的集合
 //     */
 //    private List<ChainDropDown> subList;
-
+    public static final String ROOT_KEY = "root";
     /**
      * 是否是根目录
      */
     private boolean rootFlag=true;
+
+    private String typeName;
 
 //    private List<String> data;
 

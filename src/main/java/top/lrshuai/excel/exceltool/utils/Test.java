@@ -23,7 +23,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class Test {
 
     public static void main(String[] args) {
-//        Cascade();
+        Cascade();
 
         for (int i = 1; i < 10; i++) {
             System.out.println(getRange(i-1,i,701));
@@ -47,9 +47,11 @@ public class Test {
         //依次列出各省的市、各市的县
         String[] cityJiangSu = {"南京市","苏州市","盐城市"};
         String[] cityAnHui = {"合肥市","安庆市"};
+
         String[] countyNanjing = {"六合县","江宁县"};
         String[] countySuzhou = {"姑苏区","园区"};
         String[] countyYancheng = {"响水县","射阳县"};
+
         String[] countyLiuhe = {"瑶海区","庐阳区"};
         String[] countyAnQing = {"迎江区","大观区"};
         //将有子区域的父区域放到一个数组中
@@ -68,7 +70,7 @@ public class Test {
         //因此也不能在现实页之前创建，否则无法隐藏。
         Sheet hideSheet = book.createSheet("area");
         //这一行作用是将此sheet隐藏，功能未完成时注释此行,可以查看隐藏sheet中信息是否正确
-        //book.setSheetHidden(book.getSheetIndex(hideSheet), true);
+        book.setSheetHidden(book.getSheetIndex(hideSheet), true);
 
         int rowId = 0;
         // 设置第一行，存省的信息
@@ -116,7 +118,7 @@ public class Test {
         }
         FileOutputStream os = null;
         try {
-            os = new FileOutputStream("C:/MyHome/test.xlsx");
+            os = new FileOutputStream("D:/test1.xlsx");
             book.write(os);
         } catch (Exception e) {
             e.printStackTrace();
@@ -136,8 +138,7 @@ public class Test {
     public static void setDataValidation(String offset,XSSFSheet sheet, int rowNum,int colNum) {
         XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper(sheet);
         DataValidation data_validation_list;
-        data_validation_list = getDataValidationByFormula(
-                "INDIRECT($" + offset + (rowNum) + ")", rowNum, colNum,dvHelper);
+        data_validation_list = getDataValidationByFormula("INDIRECT($" + offset + (rowNum) + ")", rowNum, colNum,dvHelper);
         sheet.addValidationData(data_validation_list);
     }
 

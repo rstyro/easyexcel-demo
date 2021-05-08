@@ -61,13 +61,16 @@ public class AreaChainDropDownService implements IChainDropDownService{
         // 这里因为我知道params 是int
         int level = Integer.parseInt(params[0]);
         boolean isRoot = level==1;
+        // 当前级别的所有区域
         List<Area> areaList = areaService.list(new LambdaQueryWrapper<Area>().eq(Area::getCtype,level));
         ChainDropDown chainDropDown = new ChainDropDown().setRootFlag(isRoot);
         Map<String,List<String>> dataMap = new HashMap<>();
         if(isRoot){
-            dataMap.put("root",areaList.stream().map(Area::getCname).collect(Collectors.toList()));
+            dataMap.put(ChainDropDown.ROOT_KEY,areaList.stream().map(Area::getCname).collect(Collectors.toList()));
         }else {
+            // 当前级别的所有父级
             Set<Long> parentIds = new HashSet<>();
+            // 父级下面的子集
             Map<Long,List<String>> childMap = new HashMap<>();
             areaList.forEach(i->{
                 parentIds.add(i.getParentId());
@@ -80,7 +83,7 @@ public class AreaChainDropDownService implements IChainDropDownService{
                 }
             });
 //            Set<Long> parentIds = areaList.stream().map(Area::getParentId).collect(Collectors.toSet());
-            List<Area> parentAreaList = areaService.list(new LambdaQueryWrapper<Area>().in(Area::getParentId, parentIds));
+            List<Area> parentAreaList = areaService.list(new LambdaQueryWrapper<Area>().in(Area::getId, parentIds));
             parentAreaList.stream().forEach(parent->{
                 dataMap.put(parent.getCname(),childMap.get(parent.getId()));
             });

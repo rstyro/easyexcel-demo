@@ -76,6 +76,7 @@ public class ResolveAnnotation {
             try {
                 IChainDropDownService chainDropDownService = Arrays.stream(classes).findFirst().get().newInstance();
                 ChainDropDown source = chainDropDownService.getSource(chainDropDownFields.params());
+                source.setTypeName(chainDropDownFields.type().getValue());
                 return source;
             } catch (Exception e) {
                 e.printStackTrace();

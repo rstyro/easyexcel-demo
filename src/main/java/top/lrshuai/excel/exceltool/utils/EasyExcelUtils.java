@@ -9,6 +9,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 import top.lrshuai.excel.exceltool.dropdown.annotation.ChainDropDownFields;
 import top.lrshuai.excel.exceltool.dropdown.annotation.DropDownFields;
+import top.lrshuai.excel.exceltool.dropdown.handler.ChainDropDownWriteHandler;
 import top.lrshuai.excel.exceltool.dropdown.handler.DropDownWriteHandler;
 import top.lrshuai.excel.exceltool.dropdown.handler.ResolveAnnotation;
 import top.lrshuai.excel.exceltool.entity.ChainDropDown;
@@ -19,10 +20,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * easyExcel 工具类
@@ -54,11 +53,13 @@ public class EasyExcelUtils {
         Field[] fields = templateClass.getDeclaredFields();
         // 响应字段对应的下拉集合
         Map<Integer, String[]> map = processDropDown(fields);
+        Map<Integer, ChainDropDown> integerChainDropDownMap = processChainDropDown(fields);
         ExcelWriter excelWriter = null;
         OutputStream out = null;
         try {
             out = response.getOutputStream();
-            excelWriter = EasyExcel.write(out, templateClass).registerWriteHandler(new DropDownWriteHandler(map)).build();
+            excelWriter = EasyExcel.write(out, templateClass).registerWriteHandler(new DropDownWriteHandler(map))
+                    .registerWriteHandler(new ChainDropDownWriteHandler(integerChainDropDownMap)).build();
             // 分页写入
             pageWrite(excelWriter,data,pageSize);
         } catch (Throwable e) {
@@ -132,7 +133,7 @@ public class EasyExcelUtils {
 
     public static Map<Integer, ChainDropDown> processChainDropDown(Field[] fields){
         // 响应字段对应的下拉集合
-        Map<Integer, List<ChainDropDown>> map = new HashMap<>();
+        Map<Integer, ChainDropDown> map = new HashMap<>();
         Field field = null;
         int rowIndex=0;
         // 循环判断哪些字段有下拉数据集，并获取
@@ -143,7 +144,15 @@ public class EasyExcelUtils {
             if (null != chainDropDownFields) {
 //                List<ChainDropDown> sources = ResolveAnnotation.resolve(chainDropDownFields);
                 ChainDropDown resolve = ResolveAnnotation.resolve(chainDropDownFields);
-                resolve.setRowIndex(rowIndex);
+                long collect = resolve.getDataMap().keySet().size();
+                System.out.println("collect="+collect);
+                if(resolve.isRootFlag()){
+                    resolve.setRowIndex(rowIndex);
+                    rowIndex+=1;
+                }else {
+                    resolve.setRowIndex(rowIndex);
+                    rowIndex+=collect;
+                }
                 if (!ObjectUtils.isEmpty(resolve)) {
                     map.put(i, resolve);
                 }
