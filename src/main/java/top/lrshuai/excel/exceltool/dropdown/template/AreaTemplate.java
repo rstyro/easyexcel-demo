@@ -6,8 +6,11 @@ import com.alibaba.excel.annotation.write.style.ContentRowHeight;
 import com.alibaba.excel.annotation.write.style.HeadRowHeight;
 import lombok.Data;
 import top.lrshuai.excel.exceltool.converter.LocalDateTimeConverter;
+import top.lrshuai.excel.exceltool.dropdown.annotation.ChainDropDownFields;
 import top.lrshuai.excel.exceltool.dropdown.annotation.DropDownFields;
+import top.lrshuai.excel.exceltool.dropdown.enums.ChainDropDownType;
 import top.lrshuai.excel.exceltool.dropdown.enums.DropDownType;
+import top.lrshuai.excel.exceltool.dropdown.service.AreaChainDropDownService;
 import top.lrshuai.excel.exceltool.dropdown.service.OccupationDropDownService;
 
 import java.time.LocalDateTime;
@@ -19,7 +22,7 @@ import java.time.LocalDateTime;
 @HeadRowHeight(25)
 // 列宽，可在类或属性中使用
 @ColumnWidth(25)
-public class UserTemplate {
+public class AreaTemplate {
 
     @ExcelProperty("用户名称")
     private String username;
@@ -44,4 +47,19 @@ public class UserTemplate {
     @ColumnWidth(50)
     @ExcelProperty(value = "注册时间",converter = LocalDateTimeConverter.class)
     private LocalDateTime createTime=LocalDateTime.now();
+
+    @ExcelProperty("省")
+    @ChainDropDownFields(sourceClass = AreaChainDropDownService.class,type = ChainDropDownType.AREA,params = {"1"})
+    private String province;
+
+    @ExcelProperty("市")
+    @ChainDropDownFields(sourceClass = AreaChainDropDownService.class,type = ChainDropDownType.AREA,params = {"2"})
+    private String city;
+
+    @ExcelProperty("区")
+    @ChainDropDownFields(sourceClass = AreaChainDropDownService.class,type = ChainDropDownType.AREA,params = {"3"})
+    private String zone;
+
+    @ExcelProperty("详细地址")
+    private String address;
 }

@@ -36,7 +36,7 @@ public class DropDownController {
     @GetMapping("/downloadTemplate")
     public void downloadTemplate(HttpServletResponse response) throws Exception {
         List<UserTemplate> export = new ArrayList<>(Arrays.asList(new UserTemplate()));
-        EasyExcelUtils.export(export, UserTemplate.class, export.size(), "模板", response);
+        EasyExcelUtils.exportBrowser(export, UserTemplate.class, export.size(), "模板", response);
     }
 
     /**
@@ -49,7 +49,7 @@ public class DropDownController {
         List<User> list = userService.list();
         String jsonUser = JSON.toJSONString(list);
         List<UserDto> userDtoList = JSON.parseArray(jsonUser, UserDto.class);
-        EasyExcelUtils.export(userDtoList, UserDto.class, userDtoList.size(), "用户信息", response);
+        EasyExcelUtils.exportBrowser(userDtoList, UserDto.class, userDtoList.size(), "用户信息", response);
     }
 
     /**

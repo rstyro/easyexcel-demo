@@ -11,11 +11,6 @@ import java.lang.annotation.*;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ChainDropDownFields {
-    /**
-     * 固定下拉
-     * @return string[]
-     */
-    String[] source() default {};
 
     /**
      * 动态下拉内容，可查数据库返回等，其他操作
@@ -30,7 +25,7 @@ public @interface ChainDropDownFields {
     String[] params() default {};
 
     /**
-     * 级联下拉类型，可能动态查询的时候需要用到
+     * 级联下拉类型
      * @return type
      */
     ChainDropDownType type() default ChainDropDownType.NONE;

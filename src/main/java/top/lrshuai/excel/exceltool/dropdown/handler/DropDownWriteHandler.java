@@ -36,7 +36,7 @@ public class DropDownWriteHandler implements SheetWriteHandler {
         Sheet sheet = writeSheetHolder.getSheet();
         DataValidationHelper helper = sheet.getDataValidationHelper();
 
-        // k 为存在下拉数据集的单元格下表 v为下拉数据集
+        // k 为存在下拉数据集的单元格下标 v为下拉数据集
         map.forEach((k, v) -> {
             // 设置下拉单元格的首行 末行 首列 末列
             CellRangeAddressList rangeList = new CellRangeAddressList(1, 65536, k, k);
