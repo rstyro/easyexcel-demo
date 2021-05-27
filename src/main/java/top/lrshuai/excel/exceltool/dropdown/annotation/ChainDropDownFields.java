@@ -19,6 +19,12 @@ public @interface ChainDropDownFields {
     Class[] sourceClass() default {};
 
     /**
+     * 是不是第一级下拉
+     * @return
+     */
+    boolean isRoot() default false;
+
+    /**
      * 获取下拉的参数,可以有1个到多个
      * @return string
      */

@@ -20,8 +20,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * easyExcel 工具类
@@ -161,4 +163,26 @@ public class EasyExcelUtils {
         return map;
     }
 
+    /**
+     * 获取Excel列的号码A-Z - AA-ZZ - AAA-ZZZ 。。。。
+     * @param num
+     * @return
+     */
+    public static String getColNum(int num) {
+        int MAX_NUM = 26;
+        char initChar = 'A';
+        if(num == 0){
+            return initChar+"";
+        }else if(num > 0 && num < MAX_NUM){
+            int result = num % MAX_NUM;
+            return (char) (initChar + result) + "";
+        }else if(num >= MAX_NUM){
+            int result = num / MAX_NUM;
+            int mod = num % MAX_NUM;
+            String starNum = getColNum(result-1);
+            String endNum = getColNum(mod);
+            return starNum+endNum;
+        }
+        return "";
+    }
 }

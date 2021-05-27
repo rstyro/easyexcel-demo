@@ -5,6 +5,7 @@ import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
 import com.alibaba.excel.write.metadata.holder.WriteWorkbookHolder;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddressList;
+import top.lrshuai.excel.exceltool.utils.EasyExcelUtils;
 
 import java.util.Map;
 
@@ -53,7 +54,7 @@ public class DropDownWriteHandler implements SheetWriteHandler {
                 }
                 Name category1Name = workbook.createName();
                 category1Name.setNameName(sheetName);
-                String excelLine = getColNum(k);
+                String excelLine = EasyExcelUtils.getColNum(k);
                 // =hidden!$H:$1:$H$50 sheet为hidden的 H1列开始H50行数据获取下拉数组
                 String refers = "=" + sheetName + "!$" + excelLine + "$1:$" + excelLine + "$" + (v.length + 1);
                 // 将刚才设置的sheet引用到你的下拉列表中
@@ -79,27 +80,6 @@ public class DropDownWriteHandler implements SheetWriteHandler {
         });
     }
 
-    /**
-     * 获取Excel列的号码A-Z - AA-ZZ - AAA-ZZZ 。。。。
-     * @param num
-     * @return
-     */
-    private static String getColNum(int num) {
-        int MAX_NUM = 26;
-        char initChar = 'A';
-        if(num == 0){
-            return initChar+"";
-        }else if(num > 0 && num < MAX_NUM){
-            int result = num % MAX_NUM;
-            return (char) (initChar + result) + "";
-        }else if(num >= MAX_NUM){
-            int result = num / MAX_NUM;
-            int mod = num % MAX_NUM;
-            String starNum = getColNum(result-1);
-            String endNum = getColNum(mod);
-            return starNum+endNum;
-        }
-        return "";
-    }
+
 
 }

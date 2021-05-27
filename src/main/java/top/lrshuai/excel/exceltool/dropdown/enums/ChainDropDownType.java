@@ -6,6 +6,7 @@ package top.lrshuai.excel.exceltool.dropdown.enums;
 public enum ChainDropDownType {
     NONE("NONE","无，空"),
     AREA("area","区域级联，相同的类型会创建一个隐藏的sheet，名称是value"),
+    TEST("test","测试"),
     ;
 
     private String value;

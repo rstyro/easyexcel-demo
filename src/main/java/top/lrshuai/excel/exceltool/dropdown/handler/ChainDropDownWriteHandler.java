@@ -5,14 +5,12 @@ import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
 import com.alibaba.excel.write.metadata.holder.WriteWorkbookHolder;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddressList;
-import org.apache.poi.xssf.usermodel.XSSFDataValidation;
 import org.springframework.util.ObjectUtils;
 import top.lrshuai.excel.exceltool.entity.ChainDropDown;
+import top.lrshuai.excel.exceltool.utils.EasyExcelUtils;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * excel 级联下拉框 handler
@@ -20,11 +18,6 @@ import java.util.stream.Collectors;
 public class ChainDropDownWriteHandler implements SheetWriteHandler {
 
     private final Map<Integer, ChainDropDown> map;
-
-    /**
-     * 设置阈值，避免生成的导入模板下拉值获取不到
-     */
-    private static final Integer LIMIT_NUMBER = 100;
 
     public ChainDropDownWriteHandler(Map<Integer, ChainDropDown> map) {
         this.map = map;
@@ -41,9 +34,10 @@ public class ChainDropDownWriteHandler implements SheetWriteHandler {
         Sheet sheet = writeSheetHolder.getSheet();
         DataValidationHelper helper = sheet.getDataValidationHelper();
         Workbook workbook = writeWorkbookHolder.getWorkbook();
-        // k 为存在下拉数据集的单元格下表 v为下拉数据集
-        map.forEach((k, v) -> {
-            // 设置下拉单元格的首行 末行 首列 末列
+        for(Map.Entry<Integer, ChainDropDown> e:map.entrySet()){
+            // k 为存在下拉数据集的单元格下表 v为下拉数据集
+            Integer k = e.getKey();
+            ChainDropDown v = e.getValue();
             CellRangeAddressList rangeList = new CellRangeAddressList(1, 65536, k, k);
             Sheet hideSheet = getSheet(workbook, v.getTypeName());
             if(v.isRootFlag()){
@@ -88,12 +82,10 @@ public class ChainDropDownWriteHandler implements SheetWriteHandler {
                 }
 
             }
-
-
             // 从第二行开始，第一行是标题
             int beginRow = 2;
             // 设置级联有效性
-            String listFormula = "INDIRECT($" + getColNum(k-1) + beginRow + ")";
+            String listFormula = "INDIRECT($" +  EasyExcelUtils.getColNum(k-1) + beginRow + ")";
             DataValidationConstraint formulaListConstraint = helper.createFormulaListConstraint(listFormula);
             // 设置下拉约束
             DataValidation validation =   helper.createValidation(formulaListConstraint, rangeList);
@@ -103,13 +95,7 @@ public class ChainDropDownWriteHandler implements SheetWriteHandler {
             // 设置输入信息提示信息
             validation.createPromptBox("下拉选择提示", "请使用下拉方式选择合适的值！");
             sheet.addValidationData(validation);
-
-        });
-
-
-
-
-
+        }
     }
 
     public Sheet getSheet(Workbook workbook,String sheetName){
@@ -129,33 +115,12 @@ public class ChainDropDownWriteHandler implements SheetWriteHandler {
      *
      */
     public static String getRange(int offset, int rowNum, int colCount) {
-        String start = getColNum(offset);
-        String end = getColNum(colCount);
+        String start = EasyExcelUtils.getColNum(offset);
+        String end = EasyExcelUtils.getColNum(colCount);
         String format= "$%s$%s:$%s$%s";
         return String.format(format, start,rowNum,end,rowNum);
     }
 
-    /**
-     * 获取Excel列的号码A-Z - AA-ZZ - AAA-ZZZ 。。。。
-     * @param num
-     * @return
-     */
-    private static String getColNum(int num) {
-        int MAX_NUM = 26;
-        char initChar = 'A';
-        if(num == 0){
-            return initChar+"";
-        }else if(num > 0 && num < MAX_NUM){
-            int result = num % MAX_NUM;
-            return (char) (initChar + result) + "";
-        }else if(num >= MAX_NUM){
-            int result = num / MAX_NUM;
-            int mod = num % MAX_NUM;
-            String starNum = getColNum(result-1);
-            String endNum = getColNum(mod);
-            return starNum+endNum;
-        }
-        return "";
-    }
+
 
 }

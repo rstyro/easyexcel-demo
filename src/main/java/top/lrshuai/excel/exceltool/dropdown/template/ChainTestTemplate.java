@@ -5,15 +5,10 @@ import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import com.alibaba.excel.annotation.write.style.ContentRowHeight;
 import com.alibaba.excel.annotation.write.style.HeadRowHeight;
 import lombok.Data;
-import top.lrshuai.excel.exceltool.converter.LocalDateTimeConverter;
 import top.lrshuai.excel.exceltool.dropdown.annotation.ChainDropDownFields;
-import top.lrshuai.excel.exceltool.dropdown.annotation.DropDownFields;
 import top.lrshuai.excel.exceltool.dropdown.enums.ChainDropDownType;
-import top.lrshuai.excel.exceltool.dropdown.enums.DropDownType;
 import top.lrshuai.excel.exceltool.dropdown.service.AreaChainDropDownService;
-import top.lrshuai.excel.exceltool.dropdown.service.OccupationDropDownService;
-
-import java.time.LocalDateTime;
+import top.lrshuai.excel.exceltool.dropdown.service.TestChainDropDownService;
 
 @Data
 // 内容行高度
@@ -22,44 +17,44 @@ import java.time.LocalDateTime;
 @HeadRowHeight(25)
 // 列宽，可在类或属性中使用
 @ColumnWidth(25)
-public class AreaTemplate {
+public class ChainTestTemplate {
 
     @ExcelProperty("用户名称")
-    private String username;
+    private String name;
 
     @ExcelProperty("年龄")
     private Integer age;
 
-    /**
-     * 固定下拉
-     */
-    @ExcelProperty("部门")
-    @DropDownFields(source = {"财务部","人事部","研发部","商务部"})
-    private String department;
 
-    /**
-     * 动态下拉
-     */
-    @ExcelProperty("职业")
-    @DropDownFields(sourceClass = OccupationDropDownService.class,type = DropDownType.OCCUPATION)
-    private String occupation;
+    @ExcelProperty("国家")
+    @ChainDropDownFields(isRoot = true,sourceClass = TestChainDropDownService.class,type = ChainDropDownType.TEST)
+    private String country;
 
-    @ColumnWidth(50)
-    @ExcelProperty(value = "注册时间",converter = LocalDateTimeConverter.class)
-    private LocalDateTime createTime=LocalDateTime.now();
+    @ExcelProperty("省份")
+    @ChainDropDownFields(sourceClass = TestChainDropDownService.class,type = ChainDropDownType.TEST,params = {"2"})
+    private String province;
+
+    @ExcelProperty("城市")
+    @ChainDropDownFields(sourceClass = TestChainDropDownService.class,type = ChainDropDownType.TEST,params = {"3"})
+    private String city;
+
+    @ExcelProperty("区域")
+    @ChainDropDownFields(sourceClass = TestChainDropDownService.class,type = ChainDropDownType.TEST,params = {"4"})
+    private String zone;
+
+
 
     @ExcelProperty("省")
     @ChainDropDownFields(isRoot = true,sourceClass = AreaChainDropDownService.class,type = ChainDropDownType.AREA,params = {"1"})
-    private String province;
+    private String province2;
 
     @ExcelProperty("市")
     @ChainDropDownFields(sourceClass = AreaChainDropDownService.class,type = ChainDropDownType.AREA,params = {"2"})
-    private String city;
+    private String city2;
 
     @ExcelProperty("区")
     @ChainDropDownFields(sourceClass = AreaChainDropDownService.class,type = ChainDropDownType.AREA,params = {"3"})
-    private String zone;
+    private String zone2;
 
-    @ExcelProperty("详细地址")
-    private String address;
+
 }

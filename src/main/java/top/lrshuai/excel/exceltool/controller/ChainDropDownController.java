@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import top.lrshuai.excel.exceltool.dict.entity.User;
 import top.lrshuai.excel.exceltool.dict.service.IUserService;
 import top.lrshuai.excel.exceltool.dropdown.template.AreaTemplate;
+import top.lrshuai.excel.exceltool.dropdown.template.ChainTestTemplate;
 import top.lrshuai.excel.exceltool.dropdown.template.UserTemplate;
 import top.lrshuai.excel.exceltool.entity.UserDto;
 import top.lrshuai.excel.exceltool.utils.EasyExcelUtils;
@@ -38,6 +39,12 @@ public class ChainDropDownController {
     public void downloadTemplate(HttpServletResponse response) throws Exception {
         List<AreaTemplate> export = new ArrayList<>(Arrays.asList(new AreaTemplate()));
         EasyExcelUtils.exportBrowser(export, AreaTemplate.class, export.size(), "级联模板", response);
+    }
+
+    @GetMapping("/downloadTemplate2")
+    public void downloadTemplate2(HttpServletResponse response) throws Exception {
+        List<ChainTestTemplate> export = new ArrayList<>(Arrays.asList(new ChainTestTemplate()));
+        EasyExcelUtils.exportBrowser(export, ChainTestTemplate.class, export.size(), "测试级联模板", response);
     }
 
     /**

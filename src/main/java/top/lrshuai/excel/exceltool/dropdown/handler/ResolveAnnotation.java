@@ -7,7 +7,6 @@ import top.lrshuai.excel.exceltool.dropdown.service.IDropDownService;
 import top.lrshuai.excel.exceltool.entity.ChainDropDown;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -48,24 +47,6 @@ public class ResolveAnnotation {
         return new String[0];
     }
 
-//    public static List<ChainDropDown> resolve(ChainDropDownFields chainDropDownFields) {
-//        if (!Optional.ofNullable(chainDropDownFields).isPresent()) {
-//            return null;
-//        }
-//        // 获取动态的下拉数据
-//        Class<? extends IChainDropDownService>[] classes = chainDropDownFields.sourceClass();
-//        if (null != classes && classes.length > 0) {
-//            try {
-//                IChainDropDownService chainDropDownService = Arrays.stream(classes).findFirst().get().newInstance();
-//                List<ChainDropDown> source = chainDropDownService.getSource(chainDropDownFields.params());
-//                return source;
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        return null;
-//    }
-
     public static ChainDropDown resolve(ChainDropDownFields chainDropDownFields) {
         if (!Optional.ofNullable(chainDropDownFields).isPresent()) {
             return null;
@@ -75,7 +56,7 @@ public class ResolveAnnotation {
         if (null != classes && classes.length > 0) {
             try {
                 IChainDropDownService chainDropDownService = Arrays.stream(classes).findFirst().get().newInstance();
-                ChainDropDown source = chainDropDownService.getSource(chainDropDownFields.params());
+                ChainDropDown source = chainDropDownService.getSource(chainDropDownFields.isRoot(),chainDropDownFields.params());
                 source.setTypeName(chainDropDownFields.type().getValue());
                 return source;
             } catch (Exception e) {
