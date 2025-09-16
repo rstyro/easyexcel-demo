@@ -1,5 +1,6 @@
 package top.lrshuai.excel.exceltool.dropdown.annotation;
 
+import top.lrshuai.excel.exceltool.dropdown.enums.DropDownEnum;
 import top.lrshuai.excel.exceltool.dropdown.enums.DropDownType;
 
 import java.lang.annotation.*;
@@ -16,6 +17,15 @@ public @interface DropDownFields {
      * @return
      */
     String[] source() default {};
+
+    /**
+     * 指定提供下拉选项的枚举类
+     * 该枚举必须实现 DropDownEnum 接口
+     * @return
+     */
+    Class<? extends DropDownEnum> enumClass() default DropDownEnum.class;
+
+
 
     /**
      * 动态下拉内容，可查数据库返回等，其他操作

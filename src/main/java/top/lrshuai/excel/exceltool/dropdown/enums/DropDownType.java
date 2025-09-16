@@ -3,7 +3,7 @@ package top.lrshuai.excel.exceltool.dropdown.enums;
 /**
  * 下拉类型枚举
  */
-public enum DropDownType {
+public enum DropDownType  implements DropDownEnum{
     NONE("NONE","无，空"),
     DEPT("dept","部门"),
     OCCUPATION("occupation","职业"),
@@ -24,5 +24,10 @@ public enum DropDownType {
 
     public String getValue() {
         return value;
+    }
+
+    @Override
+    public String getDropDownValue() {
+        return this.remark;
     }
 }

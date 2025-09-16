@@ -3,7 +3,7 @@ package top.lrshuai.excel.exceltool.dropdown.enums;
 /**
  * 级联下拉类型枚举
  */
-public enum ChainDropDownType {
+public enum ChainDropDownType implements DropDownEnum{
     NONE("NONE","无，空"),
     AREA("area","区域级联，相同的类型会创建一个隐藏的sheet，名称是value"),
     TEST("test","测试"),
@@ -23,5 +23,10 @@ public enum ChainDropDownType {
 
     public String getValue() {
         return value;
+    }
+
+    @Override
+    public String getDropDownValue() {
+        return this.value;
     }
 }

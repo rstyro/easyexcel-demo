@@ -3,7 +3,6 @@ package top.lrshuai.excel.exceltool.controller;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.util.FileUtils;
 import com.alibaba.fastjson.JSON;
-import com.sun.scenario.effect.ImageData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
@@ -17,7 +16,6 @@ import top.lrshuai.excel.exceltool.dict.service.IUserService;
 import top.lrshuai.excel.exceltool.entity.ImageDto;
 import top.lrshuai.excel.exceltool.entity.UserDto;
 import top.lrshuai.excel.exceltool.utils.EasyExcelUtils;
-import top.lrshuai.excel.exceltool.utils.FileUtil;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;

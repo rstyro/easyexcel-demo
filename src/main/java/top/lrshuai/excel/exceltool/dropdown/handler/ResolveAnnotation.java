@@ -1,17 +1,20 @@
 package top.lrshuai.excel.exceltool.dropdown.handler;
 
+import lombok.extern.slf4j.Slf4j;
 import top.lrshuai.excel.exceltool.dropdown.annotation.ChainDropDownFields;
 import top.lrshuai.excel.exceltool.dropdown.annotation.DropDownFields;
+import top.lrshuai.excel.exceltool.dropdown.enums.DropDownEnum;
 import top.lrshuai.excel.exceltool.dropdown.service.IChainDropDownService;
 import top.lrshuai.excel.exceltool.dropdown.service.IDropDownService;
 import top.lrshuai.excel.exceltool.entity.ChainDropDown;
 
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 解析下拉注解工具类
  */
+@Slf4j
 public class ResolveAnnotation {
 
     /**
@@ -20,13 +23,22 @@ public class ResolveAnnotation {
      * @return string[]
      */
     public static String[] resolve(DropDownFields dropDownField) {
-        if (!Optional.ofNullable(dropDownField).isPresent()) {
+        if (dropDownField == null) {
             return new String[0];
         }
         // 获取固定下拉信息
         String[] source = dropDownField.source();
         if (source.length > 0) {
             return source;
+        }
+        if (!dropDownField.enumClass().equals(DropDownEnum.class)) {
+            // 通过枚举类获取选项
+            DropDownEnum[] enumConstants = dropDownField.enumClass().getEnumConstants();
+            if (enumConstants != null) { // 安全获取枚举常量
+                return Arrays.stream(enumConstants)
+                        .map(DropDownEnum::getDropDownValue)
+                        .toArray(String[]::new);
+            }
         }
 
         // 获取动态的下拉数据
@@ -38,10 +50,8 @@ public class ResolveAnnotation {
                 if (null != dynamicSource && dynamicSource.length > 0) {
                     return dynamicSource;
                 }
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+               log.error(e.getMessage(), e);
             }
         }
         return new String[0];

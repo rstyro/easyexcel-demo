@@ -35,6 +35,14 @@ public class UserTemplate {
     private String department;
 
     /**
+     * 下拉枚举
+     */
+    @ExcelProperty("类型")
+    @DropDownFields(enumClass = DropDownType.class)
+    private String type;
+
+
+    /**
      * 动态下拉
      */
     @ExcelProperty("职业")
