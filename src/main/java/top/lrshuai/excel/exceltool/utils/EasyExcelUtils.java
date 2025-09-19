@@ -66,8 +66,7 @@ public class EasyExcelUtils {
             pageWrite(excelWriter,data,pageSize);
         } catch (Throwable e) {
             response.setHeader("Content-Disposition", "attachment;filename=下载失败");
-            e.printStackTrace();
-            log.error("文档下载失败:" + e.getMessage());
+            log.error("文档下载失败:" + e.getMessage(),e);
         } finally {
             data.clear();
             if (excelWriter != null) {

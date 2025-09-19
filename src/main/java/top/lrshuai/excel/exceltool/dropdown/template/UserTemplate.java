@@ -41,13 +41,19 @@ public class UserTemplate {
     @DropDownFields(enumClass = DropDownType.class)
     private String type;
 
-
     /**
      * 动态下拉
      */
     @ExcelProperty("职业")
     @DropDownFields(sourceClass = OccupationDropDownService.class,type = DropDownType.OCCUPATION)
     private String occupation;
+
+    /**
+     * 动态下拉
+     */
+    @ExcelProperty("职业2")
+    @DropDownFields(sourceClass = OccupationDropDownService.class,params = {"type=occupation"})
+    private String occupation2;
 
     @ColumnWidth(50)
     @ExcelProperty(value = "注册时间",converter = LocalDateTimeConverter.class)
